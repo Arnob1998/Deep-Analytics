@@ -135,7 +135,7 @@ sentence-transformers==2.2.2
 sentencepiece==0.1.97
 seqeval==1.2.2
 six==1.16.0
-smart-open==6.2.0
+smart-open==5.2.1
 smmap==5.0.0
 soupsieve==2.3.2.post1
 spacy==3.4.1
