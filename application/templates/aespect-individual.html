@@ -1,0 +1,84 @@
+{% from "_header-navbar.html" import mac_topnav %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Simple Tables</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/fontawesome-free/css/all.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+</head>
+<body>
+{{ mac_topnav(file,3) }}
+<div class="wrapper">
+
+  <div class="col-md-20">
+    <div class="card">
+      <div class="card-header">
+        <h3>Aspect to Score</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr style='font-weight:bold'>
+              {% for item in col_head %}
+                <td>{{ item }}</td>
+              {% endfor %}
+              <!-- <th style="width: 10px">#</th>
+              <th>Task</th>
+              <th>Progress</th>
+              <th style="width: 40px">Label</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in data %}
+
+            <tr>
+
+              <td>{{loop.index}}</td>
+
+              <td><button type="button" class="btn btn-info btn-sm">{{ row.aespect }}</button></td>
+    
+              <td>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-success" style="width: {{ row.ratio[0] }}%">{{ row.ratio[0] }}%</div>
+                  <div class="progress-bar bg-warning" style="width: {{ row.ratio[1] }}%">{{ row.ratio[1] }}%</div>
+                  <div class="progress-bar bg-danger" style="width: {{ row.ratio[2] }}%">{{ row.ratio[2] }}%</div>
+                </div>
+              </td>
+
+              {% if row.score > 0.50 %}
+                <td><span class="badge bg-success">{{ '%0.2f'| format(row.score) }}</span></td>
+              {% elif row.score == 0.50 %}
+                <td><span class="badge bg-warning">{{ '%0.2f'| format(row.score) }}</span></td>
+              {% else %}
+                <td><span class="badge bg-danger">{{ '%0.2f'| format(row.score) }}</span></td>
+              {% endif %}
+
+            </tr>
+
+            {% endfor %}     
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="{{url_for('static', filename='plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="url_for('static', filename='dist/js/adminlte.min.js')"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="url_for('static', filename='dist/js/demo.js')"></script>
+</body>
+</html>

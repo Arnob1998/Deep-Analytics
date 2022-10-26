@@ -1,0 +1,77 @@
+{% from "_header-navbar.html" import mac_topnav %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{ mac_topnav(file,3) }}
+    <div>
+        {% for topic in topics %}
+        <h2 class="text-primary" style="text-align: center;">Topic-{{loop.index}}</h2>
+        <div id = "wordcloud-{{loop.index}}" style="margin-left: 200px;">
+            <img style="width:80%; height: 40%;" src="data:image/png;base64, {{word_cloud[loop.index0]}}"/>
+        </div>
+        {% set section_id = loop.index %}
+        <div style="width:600px; margin:0 auto;">
+            {% for word in topic %}
+            <button class="btn btn-primary btn-sm" style="margin:4px;" id="{{section_id}}-{{ word }}">{{ word }}</button>
+            <script>   
+                // $('#{{section_id}}-{{ word }}').click(function(){ # send to py
+                //     $.ajax({
+                //     url:"/topicvec-keyword",
+                //     type:"POST",
+                //     dataType: "json",
+                //     contentType: "application/json",
+                //     data: JSON.stringify("{{section_id}}-{{ word }}")}); // send to main.py
+                //     }
+                // );
+
+                $('#{{section_id}}-{{ word }}').click(function(){
+                        document.getElementById('{{section_id}}-textCentroid').innerHTML = "{{topic_dict[section_id ~ '-' ~ word]}}";
+                        // console.log("{{section_id ~ '-' ~ word}}");
+                    }
+                );   
+            </script>
+            {% endfor %}
+        </div>
+        <div style="width:75%; margin:0 auto; padding: 30px;">
+            <div class="border border-primary" style="text-align: center;">
+                <p style="padding: 10px;" id="{{loop.index}}-textCentroid">Click the button to get most relavant review</p>
+            </div>            
+        </div>
+
+        {% endfor %}
+    </div>
+    <!-- Sends data to py -->
+    <!-- <script> 
+        function test() 
+        {
+            $.ajax({
+            url:"/topicvec-keyword",
+            type:"GET",
+            dataType: "json",
+            success: function(data){
+                // $("#textCentroid").replaceWith(data)        
+                $("#textCentroid").append('<li>'+ data+ '</li>'),
+                alert(data);
+                },// send to main.py
+            error: function(xhr, textStatus, error){
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+                alert("ERR")
+                }
+            })
+        }
+    </script> -->
+    <!-- <div>
+        <ul>
+            <li id="textCentroid">Placeholder</li>
+        </ul>
+    </div> -->
+</body>
+</html>

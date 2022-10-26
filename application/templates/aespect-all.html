@@ -1,0 +1,141 @@
+{% from "_header-navbar.html" import mac_topnav %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Simple Tables</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"> -->
+  <!-- Font Awesome -->
+  <!-- <link rel="stylesheet" href="{{url_for('static', filename='plugins/fontawesome-free/css/all.min.css')}}"> -->
+  <!-- Theme style -->
+  <!-- <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}"> -->
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+  <!-- outline-button-bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  
+
+</head>
+<body>
+  {{ mac_topnav(file,3) }}
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Sentiment-Based Aspect Extractor</h3>
+      </div>
+      <!-- ./card-header -->
+      <div class="card-body">
+        <table class="table table-bordered table-hover" style="width:100%;">
+          <thead style="background-color: #CCCCFF;">
+            <tr>
+              {% for item in col_head %}
+                  <th>{{ item }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in data %}
+            <tr data-widget="expandable-table" aria-expanded="false">
+              <td style="text-align: center; vertical-align: middle;">{{loop.index}}</td>
+              <td><button style="horizontal-align: middle; display: block; margin:auto;" class="btn btn-light" data-toggle="collapse" data-target="#target_col-{{loop.index}}">&nbsp;...&nbsp;</button></td>
+              <td>
+                <!-- {% for label in row.aespect %}
+                  {% for aespects in row.aespect[label] %}
+                    {% if label == "POSITIVE" %}
+                      {% set cls = 'btn-outline-success' %}
+                    {% elif label == "NEGATIVE" %}
+                      {% set cls = 'btn-outline-danger' %}
+                    {% elif label == "NEUTRAL" %}
+                      {% set cls = 'btn-outline-warning' %}
+                    {% endif %}
+                    <button type="button" class="btn {{cls}} btn-sm">{{aespects}}</button>
+                  {% endfor %}
+                  <p></p>
+                {% endfor %} -->
+                <p>
+                {% for aespects in row.aespect.POSITIVE %} 
+                  <button type="button" class="btn btn-outline-success btn-sm">{{aespects}}</button>
+                {% endfor %}
+                </p>
+                <p>
+                {% for aespects in row.aespect.NEUTRAL %}
+                  <button type="button" class="btn btn-outline-warning btn-sm">{{aespects}}</button>
+                {% endfor %}
+                </p>
+                <p>
+                {% for aespects in row.aespect.NEGATIVE %}
+                  <button type="button" class="btn btn-outline-danger btn-sm">{{aespects}}</button>
+                {% endfor %}
+                </p>
+              </td>
+
+              <td>
+              <p>
+              {% if row.score.POSITIVE != [] %}
+                <button type="button" class="btn btn-success btn-sm">{{ '%0.2f'| format(row.score.POSITIVE[0]) }}</button>
+              {% endif %}
+              </p>
+              <p>
+              {% if row.score.NEUTRAL != [] %}
+                <button type="button" class="btn btn-warning btn-sm">{{ '%0.2f'| format(row.score.NEUTRAL[0]) }}</button>
+              {% endif %}
+              </p>
+              <p>
+              {% if row.score.NEGATIVE != [] %}
+                <button type="button" class="btn btn-danger btn-sm">{{ '%0.2f'| format(row.score.NEGATIVE[0]) }}</button>
+              {% endif %}
+              </p>
+              </td>
+            </tr>
+            <tr class="expandable-body">
+              <td colspan="5" style="background-color: #CCCCFF;">
+                <p id="target_col-{{loop.index}}" class="collapse">
+                  {{row.doc[0]}}
+                </p>
+              </td> 
+            </tr>
+            {% endfor %}
+            <!-- <tr data-widget="expandable-table" aria-expanded="false">
+              <td rowspan="2">183</td>
+              <td rowspan="2"><button type="button" class="btn btn-light" data-toggle="collapse" data-target="#demo">&nbsp;...&nbsp;</button></td>
+              <td>POS</td>
+              <td rowspan="2">11-7-2014</td>
+            </tr>
+            <tr>
+              <td>NEG</td>
+            </tr>
+            <tr class="expandable-body">
+              <td colspan="5">
+                <p id="demo" class="collapse">
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+              </td> 
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="{{url_for('static', filename='plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="url_for('static', filename='dist/js/adminlte.min.js')"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="url_for('static', filename='dist/js/demo.js')"></script>
+</body>
+</html>

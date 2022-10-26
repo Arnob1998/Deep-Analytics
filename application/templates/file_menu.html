@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+
+  <span>
+    
+    <span style="width: 30%; float: left;">
+      <h1>Upload File</h1>
+      <form method='POST' enctype='multipart/form-data'>
+          {{form.hidden_tag()}}
+          {{form.file()}}
+          {{form.submit(class="btn btn-primary")}}
+      </form>
+    </span>
+
+   <span style="width: 30%; float: right;">
+      <h2>Select File</h2>
+      <ul>
+        {% for file in filename %}
+          <li><a href="{{url_for('file_selected',file_name=file)}}">{{file}}</a></li>
+        {% endfor %}
+      </ul>
+    </span>
+
+  </span>
+
+
+
+    {% if filename %}
+    <div style="width: 80%; margin: 0 auto; padding-top: 10%;">
+        {% for fileindex in range(filename| length) %}
+        <ul class="list-group">
+          <button class="btn btn-primary" type="button" style="width: 100%;">{{filename[fileindex][:-4]}}</button>
+            {% for i in range(tables[fileindex].Ratings[0]| length)  %}
+            
+              <li class="list-group-item">
+                <div>
+                  <span><strong>{{ tables[fileindex].Title[0][i] }}</strong></span>
+                  {% if (tables[fileindex].Ratings[0][i] < 2) %}
+                    <span style="float: right; color:red;"><strong>{{ tables[fileindex].Ratings[0][i] }}</strong></span>
+                  {% elif (tables[fileindex].Ratings[0][i] > 2) %}
+                    <span style="float: right; color:green;"><strong>{{ tables[fileindex].Ratings[0][i] }}</strong></span>
+                  {% else %}
+                    <span style="float: right; color:yellow;"><strong>{{ tables[fileindex].Ratings[0][i] }}</strong></span>
+                  {% endif %}
+                  <div style="padding-top:10px;"></div>
+                  <span>{{ tables[fileindex].Content[0][i] }}</span>
+                </div>
+              </li>
+
+              {% if (i == 2) %}
+                <li class="list-group-item" style="text-align: center;">...</li>
+              {% endif %}
+              
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+    {% endif %}  
+</body>
+</html>

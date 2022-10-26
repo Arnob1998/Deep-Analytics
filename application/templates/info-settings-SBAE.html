@@ -1,0 +1,364 @@
+{% from "_header-navbar.html" import mac_topnav %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--bootstrap  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <!-- custom -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/info-settings-SBAE.css') }}">
+    <title>Document</title>  
+    
+</head>
+<script>
+    // function generateFlow(models,position){
+    //   models.forEach((item, index)=>{
+	  //   // console.log(index, item);
+    //     if(index == 0)
+    //     { 
+    //       $("#flowContaier-"+position).append('<div class="right">'+item+'</div>');
+    //     }
+    //     else if(index == models.length-1){
+    //       $("#flowContaier-"+position).append('<div class="left">'+item+'</div>');
+    //     }
+    //     else{
+    //       $("#flowContaier-"+position).append('<div class="left right">'+item+'</div>');
+    //     }
+    //   });
+    // };
+
+    // function generatePlaceholderFlow(gen_steps,position){
+    //   item = "NULL";
+    //   for (let i = 0; i < gen_steps; i++){
+    //     if(i == 0)
+    //     { 
+    //       $("#flowContaier-"+position).append('<div class="right" id="flowPos-'+i+'">'+item+'</div>');
+    //     }
+    //     else if(i == gen_steps-1){
+    //       $("#flowContaier-"+position).append('<div class="left" id="flowPos-'+i+'">'+item+'</div>');
+    //     }
+    //     else{
+    //       $("#flowContaier-"+position).append('<div class="left right" id="flowPos-'+i+'">'+item+'</div>');
+    //     }        
+    //   }
+    // };
+
+    function submitActivateVisible(){
+      $('#submit_container').css({
+        'visibility':'visible'
+      });
+    }
+
+    function generateCurrentFlow(num_steps,position){
+      // make visible
+      $('#curr_flow_container').css({
+        'visibility':'visible'
+      });
+      item = "Default";
+      for (let i = 0; i < num_steps; i++){
+        if(i == 0)
+        { 
+          $("#flowContaier-"+position).append('<div class="right" id="flowPos-'+i+'">'+item+'</div>');
+        }
+        else if(i == num_steps-1){
+          $("#flowContaier-"+position).append('<div class="left" id="flowPos-'+i+'">'+item+'</div>');
+        }
+        else{
+          $("#flowContaier-"+position).append('<div class="left right" id="flowPos-'+i+'">'+item+'</div>');
+        }        
+      }     
+    }
+
+    function generateSteps(num_steps, models)
+    {
+      for (let i = 0; i < num_steps; i++)
+      {
+        // empty body
+        $("#stepsContainer").append('<div class="card mb-3"> <div class="card-body" id="step_card-'+i+'">  </div> </div>');
+        // title
+        stptitle_num = i+1
+        $("#step_card-"+i).append('<h5 class="card-title">Step:'+stptitle_num+'</h5>');
+        // model selection dropbox
+        $("#step_card-"+i).append('<div><span>Select Model: </span><div class="btn-group" style="padding:15px;"><button type="button" id="stepDropdownBtn'+i+'" class="btn btn-outline-primary btn-sm form-control btn btn-default dropdown-toggle" data-toggle="dropdown">Select</button><ul class="dropdown-menu" role="menu" id="stepDropdownList'+i+'"></ul></div></div>');
+        // dropbox content
+        for (let j = 0; j < models.length; j++)
+            {   
+                $("#stepDropdownList"+i).append('<li class="dropdown-item"><a href="#">'+models[j]+'</a></li>');
+            }
+        // dropbox event
+        $('#stepDropdownList'+i+' li').on('click', function() {
+          var $dropdown = $('#stepDropdownBtn'+i+'.dropdown-toggle');
+          var text = $(this).text();
+          var $span = $dropdown.find('span');
+  
+          $dropdown.text(text).append($span);
+
+          document.querySelector("#flowPos-"+i).innerHTML = text;
+        });
+        // range slider container
+        $("#step_card-"+i).append('<div class="row" id="step_slider-'+i+'"> </div>');
+        // range slider-label
+        $("#step_slider-"+i).append('<div class="col-1"> <label for="stepRange'+i+'">Length: </label> </div>');
+        // range slider-slider
+        $("#step_slider-"+i).append('<div class="col-5"> <input type="range" class="form-range" min="142" max="500" step="1" id="stepRange'+i+'" value=142 oninput="stepRange'+i+'Output.value = this.value"> </div>');
+        // range slider-output
+        $("#step_slider-"+i).append('<div class="col-1"> <output id="stepRange'+i+'Output">142</output> </div>');
+      };
+    };
+
+
+    $(document).ready(function(){
+    // var models = ["a","b","c"];
+    var models = [];
+    {% for m in models %}
+      models.push("{{m.model_name}}");
+    {% endfor %}
+
+    $("#submit_numStep").click(function(){
+        num_steps = document.getElementById("numStep").value;
+        document.getElementById("numStep").value = "";
+        generateSteps(num_steps,models);
+        submitActivateVisible();
+        generateCurrentFlow(num_steps,"current");    
+    });
+    
+
+    // generateFlow(models,1);
+
+      // $("#submit_numStep").click(function(){
+      //   num_steps = document.getElementById("numStep").value;
+      //   document.getElementById("numStep").value = "";
+      //   for (let i = 0; i < num_steps; i++)
+      //   {
+      //       $("#stepSpace").append('<div><span>Step: '+i+'</span><div class="btn-group" style="padding:15px;"><button type="button" id="stepDropdownBtn'+i+'" class="btn btn-outline-primary btn-sm form-control btn btn-default dropdown-toggle" data-toggle="dropdown">Select</button><ul class="dropdown-menu" role="menu" id="stepDropdownList'+i+'"></ul></div></div>');
+      //       for (let j = 0; j < models.length; j++)
+      //       {   
+      //           $("#stepDropdownList"+i).append('<li class="dropdown-item"><a href="#">'+models[j]+'</a></li>');
+      //       }
+
+            // $('#stepDropdownList'+i+' li').on('click', function() {
+            //   var $dropdown = $('#stepDropdownBtn'+i+'.dropdown-toggle');
+            //   var text = $(this).text();
+            //   var $span = $dropdown.find('span');
+  
+            //   $dropdown.text(text).append($span);
+
+            //   document.querySelector("#flowPos-"+i).innerHTML = text;
+            // });
+
+      //   }
+      //   generatePlaceholderFlow(num_steps,1);
+      //   submitVisible();
+      // });
+
+    });
+</script>
+<body>
+    {{ mac_topnav(file,1) }}
+
+    {% if sbae_exists is not none %}  
+    <script>
+    $(document).ready(function(){
+      var sbae_flow = {{ sbae_exists | safe }};
+      var container_id = "curr_flow_container";
+
+      Object.keys(sbae_flow).forEach(function(key) {
+        // console.log(key, sbae_flow[key]);
+        if(key == 0)
+        { 
+          $("#"+container_id).append('<div class="right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+        }
+        else if(key == Object.keys(sbae_flow).length-1){
+          $("#"+container_id).append('<div class="left" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+        }
+        else{
+          $("#"+container_id).append('<div class="left right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+        }  
+
+      });
+
+    });
+    </script>
+
+    <div style="padding: 20px;">
+     <h6 class="card-subtitle mb-4 text-muted">Current Text Transformation pipeline:</h6>
+      <div class="flowBoxes d-flex justify-content-center" id="curr_flow_container">      
+    </div>
+
+    {% else %}
+    <p>Not Available</p>
+    {% endif %}
+
+
+    <!-- <div style="padding: 20px;">
+    <p style="margin:0 auto;">Current Step Flow : </p>
+    <div class="flowBoxes d-flex justify-content-center">
+      <div class="right">Placeholder-1</div>
+      <div class="left right">Placeholder-2</div>
+      <div class="left right">Placeholder-3</div>
+      <div class="left right">Placeholder-4</div>
+      <div class="left">Placeholder-4</div>
+    </div>
+    </div> -->
+
+    <!-- Model info table -->
+    <div class="d-flex justify-content-center" style="padding-top:15px;">
+      <table class="table table-striped table-bordered" style="width:90%;">
+        <thead>
+          <tr style="text-align: center;">
+            <th colspan="{{ infoTB_head | length }}">Text Transformation Models</th>
+          </tr>
+          <tr>
+            {% for head in infoTB_head %}
+            <th scope="col">{{ head }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for info in model_info %}
+          <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td>{{model_info[info]["name"]}}</td>
+            <td>{{model_info[info]["base-name"]}}</td>
+            <td>{{model_info[info]["description"]}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- <div class="d-flex justify-content-center">
+      <table class="table table-striped table-bordered" style="width:80%;">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+    <!-- End Model info table -->
+
+      <hr size="1" style=" border-color:#17a2b8; background:#17a2b8">
+      <div style="padding:20px;">
+        <p>Enter the number of steps : </p>
+        <input type="number" id="numStep">
+        <button id="submit_numStep" class="btn btn-outline-info btn-sm" style="margin-bottom: 4px;">Generate</button>        
+      </div>
+      <hr size="1" style=" border-color:#17a2b8; background:#17a2b8">
+
+    <!-- <div class="flowBoxes d-flex justify-content-center" id="flowContaier-1">
+    </div>
+
+    <div>
+        <div id="stepSpace">
+        </div>
+    </div> -->
+    
+
+  <!-- <div class="container-fluid">
+    <div class="row">
+      <div class="col-1">
+        <label for="customRange3" class="form-label">Max Length: </label>
+      </div>
+      <div class="col-3">
+        <input type="range" class="form-range" min="142" max="500" step="1" id="customRange3" oninput="customRange3Output.value = this.value">
+      </div>
+      <div class="col-1">
+        <output id="customRange3Output">Default</output>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- main body of steps -->
+  <div class="container-fluid" style="padding-top: 10px;" id="step_content"> 
+  <!-- flow of new tt -->
+  <div class="card border-info mb-3" id="curr_flow_container" style="visibility:hidden;">
+    <div class="flowBoxes d-flex justify-content-center" id="flowContaier-current" style="padding: 20px;">
+      <!-- flow generates here -->
+    </div>
+  </div>
+  <!-- end flow of new tt -->
+  <!-- steps-card -->
+  <div id="stepsContainer">
+
+  </div>
+  <!-- end steps-card -->
+  </div>
+
+
+  <!-- <div class="container-fluid" style="padding-top: 10px;">
+  <div class="card border-info mb-3">
+    <div class="flowBoxes d-flex justify-content-center" style="padding: 20px;">
+      <div class="right">Diersoort / I&amp;R</div>
+      <div class="left right">Model</div>
+      <div class="left right">Varianten</div>
+      <div class="left right">Bedrukkingen</div>
+      <div class="left">Bevestiging</div>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Step:1</h5>
+      <div><span>Select Model: </span><div class="btn-group" style="padding:15px;"><button type="button" id="stepDropdownBtn0" class="btn btn-outline-primary btn-sm form-control btn btn-default dropdown-toggle" data-toggle="dropdown">Select</button><ul class="dropdown-menu" role="menu" id="stepDropdownList0"><li class="dropdown-item"><a href="#">No Change</a></li><li class="dropdown-item"><a href="#">BART-Summerizer</a></li><li class="dropdown-item"><a href="#">Pegasus-Parapharser</a></li></ul></div></div>
+        <div class="row" id="step_step-1">
+          <div class="col-1">
+            <label for="customRange3">Length: </label>
+          </div>
+          <div class="col-5">
+            <input type="range" class="form-range" min="142" max="500" step="1" id="customRange3" oninput="customRange3Output.value = this.value">
+          </div>
+          <div class="col-1">
+            <output id="customRange3Output">Default</output>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Step:2</h5>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+  </div> -->
+
+    <!-- <div style="width:30%;">
+      <label for="customRange3" class="form-label">Max Length: </label>
+      <output id="customRange3Output">Default</output>
+      <input type="range" class="form-range" min="142" max="500" step="1" id="customRange3" oninput="customRange3Output.value = this.value">
+    </div> -->
+
+
+    <!-- visibility:hidden  visibility:visible -->
+    <div class="d-flex justify-content-center" id="submit_container" style="visibility:hidden; padding: 40px;"> 
+      <button class="btn btn-outline-success btn-lg" style="width: 300px;">Submit</button>
+    </div>
+
+</body>
+</html>

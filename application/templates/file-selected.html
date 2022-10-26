@@ -1,0 +1,111 @@
+{% from "_header-navbar.html" import mac_topnav %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- material icon (tune) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- flow -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/info-settings-SBAE.css') }}">
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+{{ mac_topnav(file,1) }}
+
+<div class="container-fluid" style="width:90%; padding-top: 10px;">
+    <div class="card mb-5">
+      <img src="{{url_for('static', filename='dist/img/2822.png')}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h3 class="card-title">Sentiment-Based Aspect Extractor</h3>
+          <h6 class="card-subtitle mb-4 text-muted">Discover core aspects of each review related to the emotional tone that underlies it, along with a scoring system that represents that tone.</h6>
+          <h5 class="card-title">Overview</h5>
+          <p class="card-text">Based on the emotions customers express in their reviews, this algorithm extracts identifies aspects from reviews and labels them as positive, negative, or neutral. Additionally, the degree of the emotion's intensity is graded.</p>
+          <h5 class="card-title">How it works</h5>
+          <p class="card-text">This algorithm takes the extra step of transforming the review if it is unable to extract necessary information to output a concrete result. The transformation is done by using NLP models. The transformation mainly falls under three categories: summarization, paraphrasing and custom transformation. The system transforms the review with one these models if it fails to extract aspect from that review. If is still fails to find any aspect from it then it attempt to find aspect again with a different model. The models used for these transformation and the sequence of which model should the system use if the aspect mining fails is fully customizable. The users can even provide their own NLP models to include for the transformations.</p>
+          <!-- <h5 class="card-title">Parameters</h5>
+          <span class="material-symbols-outlined">tune</span> -->
+          <div style="display: flex; justify-content: space-between;">
+            <h5 class="card-title">Parameters</h5>
+            <a href="{{url_for('into_set_SBAE',file_name=file)}}"><span class="material-symbols-outlined" style="color: blue;">tune</span></a>   
+          </div>
+          {% if sbae_exists is not none %}  
+          <script>
+          $(document).ready(function(){
+            var sbae_flow = {{ sbae_exists | safe }};
+            var container_id = "curr_flow_container";
+
+            Object.keys(sbae_flow).forEach(function(key) {
+              // console.log(key, sbae_flow[key]);
+              if(key == 0)
+              { 
+                $("#"+container_id).append('<div class="right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+              }
+              else if(key == Object.keys(sbae_flow).length-1){
+                $("#"+container_id).append('<div class="left" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+              }
+              else{
+                $("#"+container_id).append('<div class="left right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+              }  
+
+            });
+
+          });
+          </script>
+          <h6 class="card-subtitle mb-4 text-muted">Current Text Transformation pipeline:</h6>
+          <div class="flowBoxes d-flex justify-content-center" id="curr_flow_container">
+
+          </div>
+          {% else %}
+          <p>Not Available</p>
+          {% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-5">
+      <img src="{{url_for('static', filename='dist/img/719.jpg')}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h4 class="card-title">Aspect to Score</h4>
+          <h6 class="card-subtitle mb-4 text-muted">Get a thorough analysis of the most important aspects</h6>
+          <h5 class="card-title">Overview</h5>
+          <p class="card-text"></p>
+        </div>
+    </div> 
+    
+    <div class="card mb-5">
+        <img src="{{url_for('static', filename='dist/img/331.jpg')}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h4 class="card-title">Similarity Cluster</h4>
+          <h6 class="card-subtitle mb-4 text-muted">Find out how many divided group of opinions does people have about the product and get the most accurate reflection of those opinions.</h6>
+          <h5 class="card-title">Overview</h5>
+          <p class="card-text">Based on how similar the reviews are, they are divided into groups. Each group's summarized representation and the number of reviews that make up that group are also provided.</p>
+        </div>
+    </div>    
+
+    <div class="card mb-5">
+      <img src="{{url_for('static', filename='dist/img/100.jpg')}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h4 class="card-title">Topic Modeling</h4>
+        <h6 class="card-subtitle mb-4 text-muted">Extract topics discussed in the reviews</h6>
+        <h5 class="card-title">Overview</h5>
+        <p class="card-text"></p>
+      </div>
+  </div>  
+  
+  <div class="card mb-5">
+    <img src="{{url_for('static', filename='dist/img/200.png')}}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h4 class="card-title">Assitant</h4>
+      <h6 class="card-subtitle mb-4 text-muted">Extract topics discussed in the reviews</h6>
+      <h5 class="card-title">Overview</h5>
+      <p class="card-text"></p>
+    </div>
+</div>    
+</div>
+
+</body>
+</html>

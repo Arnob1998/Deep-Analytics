@@ -1,0 +1,262 @@
+{% from "_header-navbar.html" import mac_topnav %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/models-css.css') }}">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script> 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<script>
+  window.onload=function(){
+
+  {% if info.A2S.ratio[0] and info.A2S.ratio[1] and info.A2S.ratio[2] is not none %}
+
+  var horizontalBarChart = new Chart(horizontalBarChartCanvas, {
+     type: 'horizontalBar',
+     data: {
+        labels: ["Positive", "Neutral", "Negative"],
+        datasets: [{
+           data: ["{{ info.A2S.ratio[0]|round(2) }}", "{{ info.A2S.ratio[1]|round(2) }}", "{{ info.A2S.ratio[2]|round(2) }}"],
+           backgroundColor: ["#28a745", "#ffc107", "#dc3545"], 
+        }]
+     },
+     options: {
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+            }
+          }
+        },
+        responsive: true,
+        legend: {
+           display: false,
+           position: 'bottom',
+           fullWidth: true,
+           labels: {
+             boxWidth: 10,
+             padding: 50
+           }
+        },
+        scales: {
+           yAxes: [{
+             barPercentage: 0.75,
+             gridLines: {
+               display: true,
+               drawTicks: true,
+               drawOnChartArea: false
+             },
+             ticks: {
+               fontColor: '#555759',
+               fontFamily: 'Trebuchet MS',
+               fontSize: 11
+             }
+              
+           }],
+           xAxes: [{
+               gridLines: {
+                 display: true,
+                 drawTicks: false,
+                 tickMarkLength: 5,
+                 drawBorder: false
+               },
+             ticks: {
+               padding: 5,
+               beginAtZero: true,
+               fontColor: '#555759',
+               fontFamily: 'Trebuchet MS',
+               fontSize: 11,
+               callback: function(label, index, labels) {
+                return label/1000;
+               }
+                 
+             },      
+           }]
+        }
+     }
+  });
+  
+  {% endif %}
+
+  {% if info.SBAE.lt.k and info.SBAE.lt.v is not none %}
+  
+var tt_PieCanvas = document.getElementById("SBAE-TT-pie");
+
+var bg_color = [];
+var border_color = [];
+for(i = 0; i < {{info.SBAE.lt.v|tojson}}.length; i++)
+{
+  var r = Math.floor(Math.random()*255);
+  var g = Math.floor(Math.random()*255);
+  var b = Math.floor(Math.random()*255);
+  bg_color.push('rgba('+r+','+g+','+b+',0.2)')
+  border_color.push('rgba('+r+','+g+','+b+',1)')
+}
+
+var tt_PieData = {
+    labels: {{info.SBAE.lt.k|tojson}},
+    datasets: [
+        {
+            data: {{info.SBAE.lt.v|tojson}},
+            backgroundColor: bg_color,
+            borderColor : border_color
+        }]
+};
+
+var pieChart = new Chart(tt_PieCanvas, {
+  type: 'pie',
+  data: tt_PieData,
+  options:{
+    responsive: false,
+    tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+            }
+          }
+        },
+        responsive: true,
+        legend: {
+          labels: {
+            usePointStyle: true,
+            boxWidth: 0,
+            fontSize: 10
+          },
+          position: "right",
+          align: "center"
+        },
+    }
+});
+
+{% endif %}
+
+}
+  </script>
+
+<body>
+{{ mac_topnav(file,2) }}
+<div style="width:98%;">
+  <div class="d-flex justify-content-center row" id="row1">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ info.SBAE.header }}</h5>
+          <p class="card-text">{{ info.SBAE.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Progress: 
+            <span style="color: {{'red' if info.SBAE.l1 <= 50 else 'green'}};">
+              {{ info.SBAE.l1 }}%
+            </span>
+          </li>
+          <li class="list-group-item">Data Used: 
+            {% if info.SBAE.l2.percent is not none %}
+            <span style="color: {{'red' if info.SBAE.l2.percent <= 50 else 'green'}};">
+              {{ info.SBAE.l2.percent }}%
+            </span>
+            {% endif %}
+          </li>
+          <li class="list-group-item">
+            <p style="font-weight:bold;">Text Trasformation</p>
+            <canvas id="SBAE-TT-pie"></canvas>
+          </li>
+        </ul>
+        <div class="card-body" style="margin:0 auto;">
+              <a class="card-link btn btn-outline-primary" href="{{url_for('all_aespect',file_name=file)}}">
+                Result
+              </a>
+        </div>
+    </div>
+    
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ info.A2S.header }}</h5>
+          <p class="card-text">{{ info.A2S.description }}</p>
+          <span style="color: #F1C40F;">
+            <i><strong>*Note:</strong> {{ info.A2S.note }}</i>
+          </span>
+        </div>
+        <ul class="list-group list-group-flush">
+          <!-- <li class="list-group-item">Overall Ratio: {{info.A2S.ratio[0]}}% {{info.A2S.ratio[1]}}%</li> -->
+          <li class="list-group-item">Overall Ratio:
+          {% if info.A2S.ratio[0] and info.A2S.ratio[1] and info.A2S.ratio[2] is not none %} 
+          <canvas id="horizontalBarChartCanvas"></canvas>
+          {% else %}
+          <p style="color: #85929E; padding-top:10px;"><i>Process <strong>{{ info.SBAE.header }}</strong> to get this information</i></p>
+          {% endif %}
+          </li>
+          <li class="list-group-item">Unique Aespects: {{info.A2S.u_aespect}}</li>
+          <li class="list-group-item">Status: {{info.A2S.stat}}</li>
+        </ul>
+        <div class="card-body" style="margin:0 auto;">
+          <a class="card-link btn btn-outline-primary" href="{{url_for('individual_aespect',file_name=file)}}">
+            Result
+          </a>
+        </div>
+    </div>
+    
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ info.SMC.header }}</h5>
+          <p class="card-text">{{ info.SMC.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Progress:
+            <span style="color: {{'red' if info.SMC.l1 <= 50 else 'green'}};">
+              {{ info.SMC.l1 }}%
+            </span>
+          </li>
+          <li class="list-group-item">Clusters Found: {{ info.SMC.l2 }}</li>
+          <li class="list-group-item">Maxium Similarity: {{ info.SMC.l3 }}</li>
+          <li class="list-group-item">Minimum Similarity: {{ info.SMC.l4 }}</li>
+        </ul>
+        <div class="card-body" style="margin:0 auto;">
+          <a class="card-link btn btn-outline-primary" href="{{url_for('similarity_cluster',file_name=file)}}">
+            Result
+          </a>
+        </div>
+    </div>   
+  </div>
+  
+  <div class="d-flex justify-content-center row" id="row2">
+  
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{ info.TPM.header }}</h5>
+          <p class="card-text">{{ info.TPM.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Topics Found: {{ info.TPM.l1 }}</li>
+          <li class="list-group-item">Most Frquently Word: "{{ info.TPM.l2 }}"</li>
+          <li class="list-group-item">Average Keywords Found: {{ info.TPM.l3 }}</li>
+        </ul>
+        <div class="card-body" style="margin:0 auto;">
+          <a class="card-link btn btn-outline-primary" href="{{url_for('topic_model',file_name=file)}}">
+            Result
+          </a>
+        </div>
+    </div>
+    
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Assistant</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">An item</li>
+          <li class="list-group-item">A second item</li>
+          <li class="list-group-item">A third item</li>
+        </ul>
+        <div class="card-body">
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>   
+  </div>
+</div>
+</body>
+</html>
