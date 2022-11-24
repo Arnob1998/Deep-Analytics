@@ -15,9 +15,51 @@
 </head>
 <body>
 
-  <span>
+  <div class="container-fluid" style="width: 92%; padding-top: 20px;">
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="card h-100">
+          <div class="card-body" style="padding-left: 50px;">
+            <h5 class="card-title">Upload Files</h5>
+            <div style="padding-top: 15px;">
+            <form method='POST' enctype='multipart/form-data'>
+              {{form.hidden_tag()}}
+              {{form.file()}}
+              {{form.submit(class="btn btn-primary")}}
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card h-100" style="border: none;">
+          <div class="card-body">
+            <h1 style="text-align: center; line-height: 90px; font-family: Helvetica;">Or</h1>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Select a File</h5>
+            {% if filename %}
+            <ul>
+              {% for file in filename %}
+                <li><a href="{{url_for('file_selected',file_name=file)}}">{{file}}</a></li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p>No file available</p>
+            {% endif %}  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <span>
     
-    <span style="width: 30%; float: left;">
+    <span style="width: 30%;margin-left: 100px; margin-top:100px; padding:10px;float: left;box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
       <h1>Upload File</h1>
       <form method='POST' enctype='multipart/form-data'>
           {{form.hidden_tag()}}
@@ -26,23 +68,27 @@
       </form>
     </span>
 
-   <span style="width: 30%; float: right;">
+   <span style="width: 30%; float: right; padding:10px; margin-right: 100px; margin-top:90px; box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
       <h2>Select File</h2>
+      {% if filename %}
       <ul>
         {% for file in filename %}
           <li><a href="{{url_for('file_selected',file_name=file)}}">{{file}}</a></li>
         {% endfor %}
       </ul>
+      {% else %}
+      <p>No file available</p>
+      {% endif %}  
     </span>
-
-  </span>
+  </span> -->
 
 
 
     {% if filename %}
-    <div style="width: 80%; margin: 0 auto; padding-top: 10%;">
+    <div style="width: 90%; margin: 0 auto; padding-top: 5%;">
+      <h3 style="text-align: center;">Available File Overview</h3>
         {% for fileindex in range(filename| length) %}
-        <ul class="list-group">
+        <ul class="list-group" style="padding-top: 20px;">
           <button class="btn btn-primary" type="button" style="width: 100%;">{{filename[fileindex][:-4]}}</button>
             {% for i in range(tables[fileindex].Ratings[0]| length)  %}
             

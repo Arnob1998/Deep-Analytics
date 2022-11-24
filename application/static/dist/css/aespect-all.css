@@ -1,0 +1,129 @@
+.index_halfcircle-rigth{
+    background-color:#38bdf8; border-radius:0px 400px 400px 0px;
+}
+
+.index_halfcircle-left{
+    background-color:#38bdf8; border-radius:400px 0px 0px 400px;
+}
+.index_text{
+    max-width: 100%; max-height: 100%; color: white; 
+    margin: 0 auto;
+}
+
+
+.aspect_circle-pos{
+    text-align: center;
+    box-shadow: 0 0 0 3px green; 
+    margin-top: 15px;
+    position: absolute; 
+    background-color: #28a745;
+    width: 55px; 
+    height: 55px;
+    color: white;
+}
+
+.aspect_circle-neu{
+    text-align: center;
+    box-shadow: 0 0 0 3px #ffc107; 
+    margin-top: 15px;
+    position: absolute; 
+    background-color: #F4D03F;
+    width: 55px; 
+    height: 55px;
+    color: white;
+}
+
+.aspect_circle-neg{
+    text-align: center;
+    box-shadow: 0 0 0 3px #dc3545; 
+    margin-top: 15px;
+    position: absolute; 
+    background-color: #EC7063;
+    width: 55px; 
+    height: 55px;
+    color: white;
+}
+
+.aspect_circle-cat{
+    border-radius: 50px ;
+    text-align: center;
+    box-shadow: 0 0 0 3px #3498DB;
+    margin-top: 15px;
+    position: absolute;
+    background-color: #85C1E9;
+    height: 55px;
+    color: white;
+}
+
+.aspect_body-pos
+{
+    border-radius: 50px;
+    background-color: #E9F7EF;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.aspect_body-neu
+{
+    border-radius: 50px;
+    background-color: #FEF9E7;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.aspect_body-neg
+{
+    border-radius: 50px;
+    background-color: #FDEDEC;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.aspect_body-cat
+{
+    border-radius: 50px;
+    background-color: #EBF5FB;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.aspect_body_title-pos
+{
+    color: green;
+}
+
+.aspect_body_title-neu
+{
+    color: #ffc107;
+}
+
+.aspect_body_title-neg
+{
+    color: #dc3545;
+}
+
+
+.text-annotation-pos{
+    padding:5px; 
+    background-color: #E9F7EF;
+    border-radius: 5px;
+    font-weight: bold;
+    color: green;
+}
+
+.text-annotation-neu{
+    padding:5px; 
+    background-color: #FEF9E7;
+    border-radius: 5px;
+    font-weight: bold; 
+    color: #ffc107;
+}
+
+.text-annotation-neg{
+    padding:5px; 
+    background-color: #FDEDEC;
+    border-radius: 5px;
+    font-weight: bold; 
+    color: red;
+
+}

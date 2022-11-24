@@ -150,13 +150,13 @@ var pieChart = new Chart(tt_PieCanvas, {
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Progress: 
             <span style="color: {{'red' if info.SBAE.l1 <= 50 else 'green'}};">
-              {{ info.SBAE.l1 }}%
+              {{ '%0.2f'| format(info.SBAE.l1) }}%
             </span>
           </li>
           <li class="list-group-item">Data Used: 
             {% if info.SBAE.l2.percent is not none %}
             <span style="color: {{'red' if info.SBAE.l2.percent <= 50 else 'green'}};">
-              {{ info.SBAE.l2.percent }}%
+              {{ '%0.2f'| format(info.SBAE.l2.percent) }}%
             </span>
             {% endif %}
           </li>
@@ -189,8 +189,19 @@ var pieChart = new Chart(tt_PieCanvas, {
           <p style="color: #85929E; padding-top:10px;"><i>Process <strong>{{ info.SBAE.header }}</strong> to get this information</i></p>
           {% endif %}
           </li>
-          <li class="list-group-item">Unique Aespects: {{info.A2S.u_aespect}}</li>
-          <li class="list-group-item">Status: {{info.A2S.stat}}</li>
+          <li class="list-group-item">Common Aespects: {{info.A2S.u_aespect}}</li>
+          <li class="list-group-item">Most Dominant:
+            {% if info.A2S.stat == "Positive" %}
+              <span style="color: green; font-weight: bold;">{{info.A2S.stat}}</span>
+            {% elif info.A2S.stat == "Neutral" %}
+              <span style="color: yellow; font-weight: bold;">{{info.A2S.stat}}</span>
+            {% elif info.A2S.stat == "Negative" %}
+              <span style="color: red; font-weight: bold;">{{info.A2S.stat}}</span>
+            {% else %}
+              <span>{{info.A2S.stat}}</span>
+            {% endif %}
+          </li>
+          <li class="list-group-item">Most Frequent: {{info.A2S.freq_class}}</li>
         </ul>
         <div class="card-body" style="margin:0 auto;">
           <a class="card-link btn btn-outline-primary" href="{{url_for('individual_aespect',file_name=file)}}">
@@ -244,16 +255,17 @@ var pieChart = new Chart(tt_PieCanvas, {
     <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="card-title">Assistant</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <p class="card-text">Get help from our Virtual Assistant.</p>
         </div>
-        <ul class="list-group list-group-flush">
+        <!-- <ul class="list-group list-group-flush">
           <li class="list-group-item">An item</li>
           <li class="list-group-item">A second item</li>
           <li class="list-group-item">A third item</li>
-        </ul>
-        <div class="card-body">
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
+        </ul> -->
+        <div class="card-body" style="margin:0 auto; padding-top: 150px;">
+          <a class="card-link btn btn-outline-primary" href="{{url_for('v_assistant_ui',file_name=file)}}">
+            Chat
+          </a>
         </div>
     </div>   
   </div>

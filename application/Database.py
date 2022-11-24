@@ -1,3 +1,4 @@
+from unicodedata import category
 from application import db
 
 class Data(db.Model):
@@ -10,9 +11,11 @@ class Data(db.Model):
 
 class Review(db.Model):
     id = db.Column(db.Integer,primary_key = True)
+    review_id = db.Column(db.Integer, nullable = False)
     rating = db.Column(db.Integer, nullable = False)
     title = db.Column(db.Text, nullable = False)
     review = db.Column(db.Text, nullable = False)
+    datetime = db.Column(db.DateTime, nullable = False)
     data_id = db.Column(db.Integer, db.ForeignKey("data.id"), nullable = False)   
     # relation_summerize = db.relationship("Summarize", backref = "ref_summarize", lazy = True)
 
@@ -29,14 +32,14 @@ class Review(db.Model):
 #     def __repr__(self):
 #         return f"AespectLog('{self.transformation}','{self.model_name}')" 
 
-class XSummarize(db.Model): # or paraphrased or just title + review
-    id = db.Column(db.Integer,primary_key = True)
-    content = db.Column(db.Text, default=None)
-    data_id = db.Column(db.Integer, db.ForeignKey("data.id"), nullable = False)
-    review_id = db.Column(db.Integer, db.ForeignKey("review.id"), nullable = False)
+# class XSummarize(db.Model): # or paraphrased or just title + review
+#     id = db.Column(db.Integer,primary_key = True)
+#     content = db.Column(db.Text, default=None)
+#     data_id = db.Column(db.Integer, db.ForeignKey("data.id"), nullable = False)
+#     review_id = db.Column(db.Integer, db.ForeignKey("review.id"), nullable = False)
 
-    def __repr__(self):
-        return f"Review('{self.content}')" 
+#     def __repr__(self):
+#         return f"Review('{self.content}')" 
 
 class SimilarityCluster(db.Model):
     id = db.Column(db.Integer,primary_key = True)
@@ -49,6 +52,7 @@ class SimilarityCluster(db.Model):
 class Aespect(db.Model):
     id = db.Column(db.Integer, primary_key = True) # if no aespect just pass content-id
     content = db.Column(db.JSON, default=None)
+    category = db.Column(db.JSON, default=None)
     transformation = db.Column(db.Text, default=None)  # default is review with no aespects
     model_name = db.Column(db.Text, default=None) 
     data_id = db.Column(db.Integer, db.ForeignKey("data.id"), nullable = False)
@@ -56,7 +60,7 @@ class Aespect(db.Model):
     # summarize_id = db.Column(db.Integer, db.ForeignKey("summarize.id"), nullable = False)
 
     def __repr__(self):
-        return f"Review('{self.content}','{self.transformation}','{self.model_name}')" 
+        return f"Review('{self.content}','{self.category}','{self.transformation}','{self.model_name}')" 
 
 class AespectIndividual(db.Model):
     id = db.Column(db.Integer,primary_key = True)
@@ -81,6 +85,16 @@ class SBAEModelSelection(db.Model):
 
     def __repr__(self):
         return f"SBAEModelSelection('{self.current_flow}')"      
+
+class TopicModel(db.Model):
+    id = db.Column(db.Integer,primary_key = True)
+    topic_words = db.Column(db.JSON, nullable = False)
+    topic_dict = db.Column(db.JSON, nullable = False)
+    topic_cloud = db.Column(db.JSON, nullable = False)
+    data_id = db.Column(db.Integer, db.ForeignKey("data.id"), nullable = False)
+
+    def __repr__(self):
+        return f"TopicModel('{self.topic_words}','{self.topic_dict}','{self.topic_cloud}')" 
 
 # python 
 # from application import db
@@ -136,3 +150,6 @@ class SBAEModelSelection(db.Model):
 
 ## detele whole table
 ## SBAEModelSelection.__table__.drop(db.engine)
+
+# Select columns
+# Aespect.query.filter(Aespect.data_id==1).all()[0].content // selects content column

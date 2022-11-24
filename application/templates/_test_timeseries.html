@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <title>Document</title>
+</head>
+<script>
+window.onload=function(){
+
+function timeBar(){
+  var densityCanvas = document.getElementById("sentiovertimeBarChart");
+
+Chart.defaults.global.defaultFontFamily = "sans-serif";
+// Chart.defaults.global.defaultFontSize = 18;
+
+var posData = {
+  label: 'Positive',
+  data: [10, 8, 5, 16, 3, 5, 7, 9],
+  backgroundColor: '#4fb37f',
+  borderColor: '#4fb37f',
+  yAxisID: "percentage"
+};
+ 
+var neuData = {
+  label: 'Neutral',
+  data: [3.7, 8.9, 9.8, 3.7, 23.1, 9.0, 8.7, 11.0],
+  backgroundColor: '#f8cf47',
+  borderColor: '#f8cf47'
+};
+
+var negData = {
+  label: 'Negative',
+  data: [3.7, 8.9, 9.8, 3.7, 23.1, 9.0, 8.7, 11.0],
+  backgroundColor: '#ec4c35',
+  borderColor: '#ec4c35'
+};
+ 
+var allData = {
+  labels: ["January", "February", "March", "April", "May", "June", "July", "October"],
+  datasets: [posData, neuData, negData]
+};
+ 
+var chartOptions = {
+  scales: {
+    xAxes: [{
+      barPercentage: .3,
+      // categoryPercentage: 0.6
+
+    }],
+    yAxes: [{
+      id: "percentage"
+    }]
+  }
+};
+ 
+var barChart = new Chart(densityCanvas, {
+  type: 'bar',
+  data: allData,
+  options: chartOptions
+});
+
+}
+
+timeBar()
+}
+</script>
+<body>
+    <h1>asd</h1>
+    <canvas id="sentiovertimeBarChart" width="600" height="400"></canvas>
+</body>
+</html>

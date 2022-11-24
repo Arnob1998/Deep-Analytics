@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js">
+</head>
+<script>
+
+var Toggle = Vue.extend({
+  template: '#vue-toggle',
+  props: ['values','selected','default'],
+  mounted: function () {
+    this.selected = this.default;
+  },
+  methods: {
+    changeSelectVal: function(val) {
+      this.selected = val;
+    }
+  }
+});
+Vue.component('vue-toggle', Toggle);
+
+new Vue({
+  el: '#app',
+  data: {
+    color: '',
+    size: '',
+    style: '',
+    fabric: '',
+    colors: {
+      'black': 'Black',
+      'gray': 'Gray',
+      'white': 'White',
+      'red': 'Red',
+      'blue': 'Blue',
+      'green': 'Green',
+    },
+    sizes: {
+      'xlarge': 'X-Large',
+      'large': 'Large',
+      'medium': 'Medium',
+      'small': 'Small',
+    },
+    styles: {
+      'crew': 'Crew Neck',
+      'vneck': 'V-Neck',
+    },
+    fabrics: {
+      'cotton': '100% Cotton',
+      'polyester': 'Polyester / Cotton',
+    }
+  }
+});
+
+</script>
+<style  lang="scss">
+
+$purple: #5c4084;
+
+body {
+  background-color: #5c4084;
+  padding: 50px;
+}
+.container {
+  background-color: #fff;
+  padding-top: 40px;
+  padding-bottom: 80px;
+  border-radius: 8px;
+}
+.heading {
+  h1 {
+    color: #fff;
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0 0 5px 0;
+    background: -webkit-linear-gradient(#fff, #999);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  h4 {
+    color: lighten(#5c3d86,30%);
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    margin: 0 0 35px 0;
+  }
+}
+.options {
+  @media (min-width: 992px) {
+    padding-top: 80px;
+  }
+}
+.btn{
+  outline: none !important;
+}
+.btn.btn-primary {
+  background-color: $purple;
+  border-color: $purple;
+  outline: none;
+  &:hover {
+    background-color: darken($purple, 10%);
+    border-color: darken($purple, 10%);
+  }
+  &:active, &:focus {
+    background-color: lighten($purple, 5%);
+    border-color: lighten($purple, 5%);
+  }
+}
+.btn.btn-default {
+  &:hover {
+    background-color: darken($purple, 10%);
+    border-color: darken($purple, 10%);
+    color: #fff;
+  }
+  &:active, &:focus {
+    background-color: lighten($purple, 5%);
+    border-color: lighten($purple, 5%);
+    color: #fff;
+  }
+}
+
+</style>
+
+<body>
+
+
+  <div class="heading">
+    <h1>Vue.js v2 Multi Option Toggle</h1>
+    <h4>A simple way of creating a multi-option toggle/select input field.</h4>
+  </div>
+  
+  <div class="container" id="app">
+      
+    <div class="row">
+      <div class="col-xs-3 col-sm-4 col-md-5 col-lg-6">
+        <img src="https://images-na.ssl-images-amazon.com/images/I/81UxhkSlBjL._UX466_.jpg" alt="" class="img-responsive" />
+      </div>
+      <div class="col-xs-9 col-sm-8 col-md-7 col-lg-6 options">
+        
+        <fieldset class="form-group">
+          <legend class="sr-only">Colors</legend>
+          <div class="form-group">
+            <vue-toggle :values="colors" :selected.sync="color" default="green"></vue-toggle>
+          </div>
+        </fieldset>
+  
+        <fieldset class="form-group">
+          <legend class="sr-only">Sizes</legend>
+          <div class="form-group">
+            <vue-toggle :values="sizes" :selected.sync="size" default="medium"></vue-toggle>
+          </div>
+        </fieldset>
+  
+        <fieldset class="form-group">
+          <legend class="sr-only">Style</legend>
+          <div class="form-group">
+            <vue-toggle :values="styles" :selected.sync="style" default="crew"></vue-toggle>
+          </div>
+        </fieldset>
+  
+        <fieldset class="form-group">
+          <legend class="sr-only">Fabric</legend>
+          <div class="form-group">
+            <vue-toggle :values="fabrics" :selected.sync="fabric" default="polyester"></vue-toggle>
+          </div>
+        </fieldset>
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  <template id="vue-toggle">
+    <div class="btn-group">
+      <button type="button" 
+        v-for="(val, key) in values"
+        @click="changeSelectVal(key)"
+        :class="['btn', { 'btn-primary': selected === key, 'btn-default': selected !== key }]"
+        >{{ val }}</button>
+    </div>
+  </template>
+
+</body>
+</html>

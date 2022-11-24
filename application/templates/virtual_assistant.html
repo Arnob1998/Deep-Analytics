@@ -1,0 +1,67 @@
+{% from "_header-navbar.html" import mac_topnav %}
+<!doctype html>
+<html lang="en">
+  <head>
+      <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/v-assistant.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <title>Virtual Assistant</title>
+  </head>
+  <body>
+    {{ mac_topnav(file,3) }}
+    <!-- Alternative : dialogflow console -> integrations -> web demo -> use generated frame -->
+<div class="container-fluid" style="padding-top: 20px;">
+<div class="row" >
+
+  <div class="col" style="padding-left: 30px;">
+    <div class="row">
+      <h2>Virtual Assistant</h2>
+    </div>
+
+    <div class="row pl-3 pt-3">
+      <h5>Chat Suggestions</h5>
+    </div>
+
+    <div class="row pt-2 pl-5">
+      <div>
+        <li><button onclick="send_msg_ui('test');">test</button></li>
+      </div> 
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end col" style="padding-right:30px;">
+    <div class="row align-items-center">
+        <div class="col-md-8 col-sm-12">
+            <div class="justify-content-center" style="width: 502px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+              <div style="background-color: #2b303e; height:60px; text-align: center; line-height: 55px;">
+                <span style="color:white; font-size: 25px; ">Virtual Assistant</span>
+              </div>
+              <div class="chat-container" style="overflow: auto;">
+                    <!-- chat messages -->
+                <div class="chat-message col-md-5 offset-md-7 bot-message">
+                      Welcome to ... How can I help you?
+                </div>
+              </div>
+              <div style="border-top: 1px solid #B2BABB;">
+                <form id="target" class="container row">
+                   <input class="input col" type="text" value="" placeholder="Enter message..." id="input_message"/>
+                   <label for="send" class="btn col-1" id="send_icon"><i class="fa-solid fa-envelope-circle-check fa-2x" style="color: #ef6c00;"></i></label>
+                   <input type="submit" id="send" hidden>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+</div>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='dist/js/v-assistant.js')}}"></script>
+  </body>
+</html>

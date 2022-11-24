@@ -26,7 +26,7 @@
           <h5 class="card-title">Overview</h5>
           <p class="card-text">Based on the emotions customers express in their reviews, this algorithm extracts identifies aspects from reviews and labels them as positive, negative, or neutral. Additionally, the degree of the emotion's intensity is graded.</p>
           <h5 class="card-title">How it works</h5>
-          <p class="card-text">This algorithm takes the extra step of transforming the review if it is unable to extract necessary information to output a concrete result. The transformation is done by using NLP models. The transformation mainly falls under three categories: summarization, paraphrasing and custom transformation. The system transforms the review with one these models if it fails to extract aspect from that review. If is still fails to find any aspect from it then it attempt to find aspect again with a different model. The models used for these transformation and the sequence of which model should the system use if the aspect mining fails is fully customizable. The users can even provide their own NLP models to include for the transformations.</p>
+          <p class="card-text">This algorithm takes the extra step of transforming the review if it is unable to extract necessary information to output a concrete result. The transformation is done by using language models. The transformation mainly falls under three categories: summarization, paraphrasing and custom transformation. The system transforms the review with one these models if it fails to extract aspect from that review. If is still fails to find any aspect from it then it attempt to find aspect again with a different model. The models used for these transformation and the sequence of which model should the system use if the aspect mining fails is fully customizable. The users can even provide their own lanugage models to include for the transformations.</p>
           <!-- <h5 class="card-title">Parameters</h5>
           <span class="material-symbols-outlined">tune</span> -->
           <div style="display: flex; justify-content: space-between;">
@@ -72,7 +72,7 @@
           <h4 class="card-title">Aspect to Score</h4>
           <h6 class="card-subtitle mb-4 text-muted">Get a thorough analysis of the most important aspects</h6>
           <h5 class="card-title">Overview</h5>
-          <p class="card-text"></p>
+          <p class="card-text">Get a high level and low level analytics of the most significant components and discover how it is accepted by customers, making it much easier to improve the quality of products.</p>
         </div>
     </div> 
     
@@ -89,10 +89,10 @@
     <div class="card mb-5">
       <img src="{{url_for('static', filename='dist/img/100.jpg')}}" class="card-img-top" alt="...">
       <div class="card-body">
-        <h4 class="card-title">Topic Modeling</h4>
+        <h4 class="card-title">Topic Extraction</h4>
         <h6 class="card-subtitle mb-4 text-muted">Extract topics discussed in the reviews</h6>
         <h5 class="card-title">Overview</h5>
-        <p class="card-text"></p>
+        <p class="card-text">Get the themes mentioned in the reviews, as well as the keywords connected with those topics. By clicking the keywords, you may also go to the most relevant topic.</p>
       </div>
   </div>  
   
@@ -100,9 +100,9 @@
     <img src="{{url_for('static', filename='dist/img/200.png')}}" class="card-img-top" alt="...">
     <div class="card-body">
       <h4 class="card-title">Assitant</h4>
-      <h6 class="card-subtitle mb-4 text-muted">Extract topics discussed in the reviews</h6>
+      <h6 class="card-subtitle mb-4 text-muted">Get help from our Virtual Assistant</h6>
       <h5 class="card-title">Overview</h5>
-      <p class="card-text"></p>
+      <p class="card-text">Have a one-on-one conversation with our virtual assistant or obtain product-related support. This assistance may be able to assist you in resolving product-related issues.</p>
     </div>
 </div>    
 </div>

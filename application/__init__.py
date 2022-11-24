@@ -10,3 +10,7 @@ app.config['UPLOAD_FOLDER'] = 'static/file'
 db = SQLAlchemy(app)
 
 from application import routes
+
+import os
+os.environ['DIALOGFLOW_PROJECT_ID'] = 'deep-analytics-va-wvey'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "credentials\deep-analytics-va-wvey-4a46b26aa0f0.json"

@@ -112,6 +112,26 @@
     };
 
 
+    function generatePrevFlow(sbae_flow){
+      
+      var container_id = "curr_flow_container";     
+
+      Object.keys(sbae_flow).forEach(function(key) {
+        if(key == 0)
+        { 
+          $("#"+container_id).append('<div class="right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+        }
+        else if(key == Object.keys(sbae_flow).length-1){
+          $("#"+container_id).append('<div class="left" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+        }
+        else{
+          $("#"+container_id).append('<div class="left right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
+        }  
+
+      });
+    }    
+
+
     $(document).ready(function(){
     // var models = ["a","b","c"];
     var models = [];
@@ -164,23 +184,8 @@
     {% if sbae_exists is not none %}  
     <script>
     $(document).ready(function(){
-      var sbae_flow = {{ sbae_exists | safe }};
-      var container_id = "curr_flow_container";
 
-      Object.keys(sbae_flow).forEach(function(key) {
-        // console.log(key, sbae_flow[key]);
-        if(key == 0)
-        { 
-          $("#"+container_id).append('<div class="right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
-        }
-        else if(key == Object.keys(sbae_flow).length-1){
-          $("#"+container_id).append('<div class="left" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
-        }
-        else{
-          $("#"+container_id).append('<div class="left right" id="flowPos-'+key+'">'+sbae_flow[key]+'</div>');
-        }  
-
-      });
+    generatePrevFlow({{ sbae_exists | safe }});
 
     });
     </script>
