@@ -34,25 +34,6 @@ def file_upload():
         return "File has been uploaded."
     return render_template("file_upload.html", form = form, file = files)
 
-@app.route("/file-view")
-def file_view():
-    files = os.listdir(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER']).replace("/","\\"))
-    pipeline = PipeLine()
-    if files:
-        sorted_data = []
-        for file in files:
-            review_data = pipeline.load_site_data(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER'] + "\\" + file))
-            review_data = review_data.head(3).append(review_data.tail(3))
-            columns = list(review_data.columns.values)
-            temp = {}
-            for col in columns:
-                temp[col] = []
-            for column in columns:
-                temp[column].append(review_data[column].to_list())
-            sorted_data.append(temp)
-        return render_template("file_view.html", tables = sorted_data, filename = files) # asuming all table has same header
-    return "No Files avaiable."
-
 @app.route("/", methods = ['GET',"POST"])
 def file_menu():
     form = UploadFileForm()
@@ -61,13 +42,19 @@ def file_menu():
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
         redirect(request.url)
 
+    files = []
+    data_que = Data.query.all()
+    for db_cls in data_que:
+        files.append(db_cls.name)
+
     sorted_data = []
-    print(str(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER'])).replace("/","\\"))
-    files = os.listdir(str("\\application\\" + str(app.config['UPLOAD_FOLDER'])).replace("/","\\"))
     pipeline = PipeLine()
     if files:   
         for file in files:
-            review_data = pipeline.load_site_data(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER'] + "\\" + file))
+            file_id = Data.query.filter_by(name=file).first().id
+            review_data = pd.read_sql_query(sql = Review.query.filter_by(data_id=file_id).statement, con=db.session.bind)
+            review_data.rename(columns={'rating': 'Ratings', 'title': 'Title', 'review': 'Content'}, inplace=True)
+            print(review_data)
             review_data = review_data.head(3).append(review_data.tail(3))
             columns = list(review_data.columns.values)
             temp = {}
