@@ -63,7 +63,7 @@ def file_menu():
 
     sorted_data = []
     print(str(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER'])).replace("/","\\"))
-    files = os.listdir(str(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER'])).replace("/","\\"))
+    files = os.listdir(str("\\application\\" + str(app.config['UPLOAD_FOLDER'])).replace("/","\\"))
     pipeline = PipeLine()
     if files:   
         for file in files:
