@@ -62,6 +62,7 @@ def file_menu():
         redirect(request.url)
 
     sorted_data = []
+    print(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER']).replace("/","\\"))
     files = os.listdir(os.getcwd() + "\\application\\" + str(app.config['UPLOAD_FOLDER']).replace("/","\\"))
     pipeline = PipeLine()
     if files:   
