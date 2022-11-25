@@ -1,6 +1,8 @@
 # Deep-Analytics
 
-Demo: https://deep-analytics.herokuapp.com/
+Demo: 
+  * https://deep-analytics.herokuapp.com/
+  * https://arnob.pythonanywhere.com/
 
 Notes for Demo: 
   * Only Nintendo Switch data is fully processed.
