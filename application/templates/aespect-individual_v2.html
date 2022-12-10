@@ -77,7 +77,7 @@ function chartjsBubble(dt,id)
       return (Math.log(value+1+1) / Math.LN10)*100;
     }
 
-    var bias = .1;
+    var bias = .15;
 
     var bg_color =  ["lightgreen", "#fdf9d6","#FF7061"]
     var border_color = ['#28a745', '#ffc107',"red" ] 
@@ -94,8 +94,8 @@ function chartjsBubble(dt,id)
           data: [{
             x: dt["skewness"][0],
             y: dt["kurtosis"][0],
-            // r: calc(dt["std"][0])
-            r: (dt["std"][0]+bias)*100
+            r: dt["mean"][0] == 0 ? 0 : (dt["std"][0]+bias)*100 
+            // r: (dt["std"][0]+bias)*100
           }]
         }, {
           label: dt["label"][1],
@@ -104,8 +104,8 @@ function chartjsBubble(dt,id)
           data: [{
             x: dt["skewness"][1],
             y: dt["kurtosis"][1],
-            // r: calc(dt["std"][1])
-            r: (dt["std"][1]+bias)*100
+            r: dt["mean"][1] == 0 ? 0 : (dt["std"][1]+bias)*100 
+            // r: (dt["std"][1]+bias)*100
           }]
         }, {
           label: dt["label"][2],
@@ -114,8 +114,8 @@ function chartjsBubble(dt,id)
           data: [{
             x: dt["skewness"][2],
             y: dt["kurtosis"][2],
-            // r: calc(dt["std"][2])
-            r: (dt["std"][2]+bias)*100
+            r: dt["mean"][2] == 0 ? 0 : (dt["std"][2]+bias)*100 
+            // r: (dt["std"][2]+bias)*100
           }]
         },
       ]
@@ -505,7 +505,88 @@ function textCapitalizer(string)
 }
 
 
+function overviewInfluence(data)
+{
+  var ctx = document.getElementById('overviewchartVerticalBar').getContext('2d');
+
+  var labels_value = Object.keys(data);
+  var data_value = Object.values(data);
+
+  var background_color = [];
+
+  for (var i = 0; i < data_value.length; i++) {
+    if(data_value[i] > .30)
+    {
+      background_color.push("#4fb37f")
+    }
+    else if(data_value[i] < -.30)
+    {
+      background_color.push("#ec4c35")
+    }
+    else{
+      background_color.push("#f8cf47")
+    }
+  }
+
+  var chart = new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+      labels: labels_value,
+      datasets: [{
+        backgroundColor: background_color,
+        data: data_value,
+      }]
+    },
+
+    options: {
+      legend: {
+            display: false
+      },
+      responsive: true,
+      title: {
+        display: false,
+        text: 'Chart type: Vertical bar simple'
+      },
+      tooltips: {
+        mode: 'index',
+        intersect: false,
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true,
+      },
+      scales: {
+        xAxes: 
+        [{
+          barPercentage: .3,
+          display: true,
+          scaleLabel: {
+            display: false,
+            labelString: 'Aspects'
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Influence Score'
+          }
+
+        }]
+      }
+    }
+  });
+
+}
+
 window.onload=function(){
+
+  let overview_data = {};
 
   {% for row in data %}
 
@@ -515,9 +596,12 @@ window.onload=function(){
     sentiOverTime({{ row.Chart_Overtime | tojson }}, {{ loop.index0 }});
     cloudEventController({{ row.Chart_Cloud | tojson }},{{ loop.index0 }})
     
+    overview_data["{{ row.name.title() }}"] = {{ row.influence|float }}
+    
   {% endfor %}
 
-  
+  overviewInfluence(overview_data)
+
 }
 
 
@@ -528,6 +612,16 @@ window.onload=function(){
   {{ mac_topnav(file,3) }}
   
   <div class="container-fluid">
+
+  <div class="card my-lg-5" style="box-shadow: #38bdf8 0px 0px 0px 2px, #5DADE2 0px 4px 6px -1px;">
+    <div style="background-color: #38bdf8; box-shadow: #38bdf8 0px 0px 0px 2px, #5DADE2 0px 4px 6px -1px">
+      <h3 class="py-2" style="color: white; text-align: center;">Summary</h3>
+    </div>
+    <div class="card-body" style="padding: 30px;">
+      <canvas id="overviewchartVerticalBar" height="80px"></canvas>
+    </div>
+  </div>
+
 
   {% for row in data %}
 
@@ -541,10 +635,10 @@ window.onload=function(){
               <div class="row align-self-center w-75" style="margin: 0 auto; padding:40px">
 
                 <div class="col">
-                  <div class="card h-100" style="width:150px ;margin: 0 auto; padding: 20px;">
+                  <div class="card h-100 border-0" style="width:150px ;margin: 0 auto; padding: 20px; background-color: #fdf6ff;">
                     <div class="row" style="margin: 0 auto;">
                       <div class="col-4" >
-                        <i class="fa-solid fa-magnet fa-2x"></i>
+                        <i class="fa-solid fa-magnet fa-2x" style="color: #8E44AD;"></i>
                       </div>
                     </div> 
                     <div style="text-align: center;">
@@ -559,10 +653,10 @@ window.onload=function(){
                 </div>
         
                 <div class="col">
-                  <div class="card h-100" style="width:150px ;margin: 0 auto; padding: 20px;">
+                  <div class="card h-100 border-0" style="width:150px ;margin: 0 auto; padding: 20px; background-color: #f5fcfe;">
                     <div class="row" style="margin: 0 auto;">
                       <div class="col-4" >
-                        <i class="fa-solid fa-book fa-2x"></i>
+                        <i class="fa-solid fa-book fa-2x" style="color: #17a2b8;"></i>
                       </div>
                     </div> 
                     <div style="text-align: center;">
@@ -581,10 +675,10 @@ window.onload=function(){
                 </div>
 
                 <div class="col">
-                  <div class="card h-100" style="width:150px ;margin: 0 auto; padding: 20px;">
+                  <div class="card h-100 border-0" style="width:150px ;margin: 0 auto; padding: 20px; background-color: #fffbf4;">
                     <div class="row"  style="margin: 0 auto;">
                       <div class="col-4">
-                        <i class="fa-solid fa-bolt fa-2x"></i>
+                        <i class="fa-solid fa-bolt fa-2x" style="color: #F39C12;"></i>
                       </div>
                     </div> 
                     <div style="text-align: center;">
@@ -608,10 +702,10 @@ window.onload=function(){
                 </div>    
                 
                 <div class="col">
-                  <div class="card h-100" style="width:150px ;margin: 0 auto; padding: 20px;">
+                  <div class="card h-100 border-0" style="width:150px ;margin: 0 auto; padding: 20px; background-color: #f3fefc;">
                     <div class="row" style="margin: 0 auto;">
                       <div class="col-4" >
-                        <i class="fa-solid fa-crown fa-2x"></i>
+                        <i class="fa-solid fa-crown fa-2x" style="color: #48C9B0;"></i>
                       </div>
                     </div> 
                     <div style="text-align: center;">

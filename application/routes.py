@@ -237,7 +237,12 @@ def topic_model(file_name):
 
 @app.route("/v-assistant-ui/<file_name>")
 def v_assistant_ui(file_name):
-    return render_template("virtual_assistant.html",file = file_name)
+
+    ctrl_v_assistant = RoutePipeLine(file_name)
+
+    aspect = ctrl_v_assistant.route_v_assistant_ui()
+
+    return render_template("virtual_assistant.html",file = file_name,indi_aes = aspect)
 
  
 @app.route('/webhook', methods=['POST'])

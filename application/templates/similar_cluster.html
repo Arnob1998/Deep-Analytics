@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Document</title>
+  <title>SimiCluster</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -16,21 +16,106 @@
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+  <!-- Highcharts -->
+  <script src="https://github.highcharts.com/master/highcharts.js"></script>
+  <script src="https://github.highcharts.com/master/highcharts-more.js"></script>
+  <script src="https://github.highcharts.com/master/modules/exporting.js"></script>
+  
 </head>
+
+<script>
+
+function getRandColor(brightness){
+  //6 levels of brightness from 0 to 5, 0 being the darkest
+  var rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
+  var mix = [brightness*51, brightness*51, brightness*51]; //51 => 255/5
+  var mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function(x){ return Math.round(x/2.0)})
+  return "rgba(" + mixedrgb.join(",") + ")";
+}
+
+
+function packedBubble(data)
+{
+
+Highcharts.chart('chartPackedbubble-container', {
+    chart: {
+        type: 'packedbubble',
+        height: '600'
+    },
+    legend: {
+      symbolWidth: 0 // invisible
+    },
+    title: {
+        text: null
+    },
+    subTitle: {
+    	text: 'cluster size'
+    },
+    tooltip: {
+        useHTML: true,
+        pointFormat: '<b>Size :</b> {point.value}</sub> <br> {point.text}</sub>'
+    },
+    plotOptions: {
+        packedbubble: {
+            dataLabels: {
+                enabled: true,
+                format: '{point.name}',
+                style: {
+                    color: 'black',
+                    textOutline: 'none',
+                    fontWeight: 'normal'
+                }
+            },
+            minSize: 30,
+            maxSize: 180
+        }
+    },
+    series: [{
+      name: "Clusters",
+      data: data
+    }]
+
+});
+
+}
+
+function processClusterData(data)
+{
+  var processed_data = []
+  Object.entries(data).forEach(([index, value]) => {
+    processed_data.push({index: index, value : data[index].length, name:data[index].length, text: data[index][0], color: getRandColor(5)})
+  });
+
+  return processed_data
+}
+
+window.onload = function() {
+
+  processed_data = processClusterData({{ data | tojson }})
+  packedBubble(processed_data)
+
+};
+
+</script>
+
 <body>
 {{ mac_topnav(file,3) }}
 <div class="wrapper">
     <!-- Main content -->
     <section class="content">
+      <div class="card-header" style="text-align: center;">
+        <h3>Similarity Cluster</h3>
+      </div>
+      <!-- <div style="height: 200px;"> -->
+        <div id="chartPackedbubble-container"></div>
+      <!-- </div> -->
+
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3>Similarity Cluster</h3>
-              </div>
+            <div>
               <!-- /.card-header -->
-              <div class="card-body">
+              <div style="padding: 20px;" >
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr style='font-weight:bold'>
@@ -68,13 +153,13 @@
                     <td>5</td>
                   </tr> -->
                   </tbody>
-                  <tfoot>
+                  <!-- <tfoot>
                     <tr style='font-weight:bold'>
                       {% for item in col_head %}
                         <td>{{ item }}</td>
                       {% endfor %}
                       </tr>
-                  </tfoot>
+                  </tfoot>  -->
                 </table>
               </div>
               <!-- /.card-body -->
@@ -115,10 +200,10 @@
 <!-- Page specific script -->
 <script>
   $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    // $("#example1").DataTable({
+    //   "responsive": true, "lengthChange": false, "autoWidth": false,
+    //   "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    // }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,

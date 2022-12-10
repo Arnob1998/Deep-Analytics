@@ -198,7 +198,7 @@ window.onload=function(){
     <div class="container-fluid">
         <div class="card my-lg-5" style="box-shadow: #38bdf8 0px 0px 0px 2px, #5DADE2 0px 4px 6px -1px">
             <div style="background-color: #38bdf8; box-shadow: #38bdf8 0px 0px 0px 2px, #5DADE2 0px 4px 6px -1px">
-                <h3 class="py-2" style="color: white; text-align: center;">Summray</h3>
+                <h3 class="py-2" style="color: white; text-align: center;">Summary</h3>
             </div>
             <div class="card-body">
                 <div class="row" style="width: 100%; margin-left: 8px;">
@@ -220,7 +220,7 @@ window.onload=function(){
                             <div class="row" style="margin:0 auto; padding-top: 15px;">
                                 <span class="col">Sentiment: </span>
                                 <div class="col">
-                                    <select id="drop_label" class="btn btn-outline-info btn-sm">
+                                    <select id="drop_label" class="btn btn-outline-primary btn-sm">
                                         <option value="POSITIVE"> Positive </option>
                                         <option value="NEUTRAL"> Neutral </option>
                                         <option value="NEGATIVE"> Negative </option>
@@ -232,7 +232,7 @@ window.onload=function(){
                             <div class="row" style="margin:0 auto; padding-top: 15px;">
                                 <span class="col">Filter By: </span>
                                 <div class="col">
-                                    <select id="drop_avg_score_label" class="btn btn-outline-info btn-sm">
+                                    <select id="drop_avg_score_label" class="btn btn-outline-primary btn-sm">
                                         <option value="max"> Maxmium </option>
                                         <option value="min"> Minimum </option>
                                     </select>
@@ -243,7 +243,7 @@ window.onload=function(){
                             <div class="row" style="height: 60%;">
                                 <div class="align-self-end">
                                     <div class="d-flex justify-content-center">
-                                        <button id="search_btn" class="btn btn-info">
+                                        <button id="search_btn" class="btn btn-primary">
                                             <i class="fa-solid fa-magnifying-glass"></i>
                                             Go
                                         </button>
@@ -320,7 +320,7 @@ window.onload=function(){
                                     <div class="h-100 aspect_body-cat">
                                         <div class="m-4">
                                             {% for cat_name in row.category %}
-                                                <button type="button" class="btn btn-primary btn-sm m-1">{{ cat_name }}</button>
+                                                <button type="button" class="btn btn-info btn-sm m-1">{{ cat_name }}</button>
                                             {% endfor %}   
                                         </div>            
                                     </div>               

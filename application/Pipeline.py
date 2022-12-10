@@ -161,6 +161,19 @@ class RoutePipeLine:
         t_cloud = q_res.topic_cloud
         return t_words,t_dict,t_cloud
 
+    def route_v_assistant_ui(self):
+        
+        if AespectIndividual.query.filter_by(data_id=self.data_id).first() is not None:
+            indi_aespect_out = []
+            indi_aespect_out_db = AespectIndividual.query.filter(AespectIndividual.content != None, AespectIndividual.data_id == self.data_id).all()
+
+            for indi_aes in indi_aespect_out_db:
+                indi_aespect_out.append(indi_aes.content)
+        else:
+            indi_aespect_out = None        
+        
+        return indi_aespect_out
+
 class TextTransformationModel:
 
     class Default:

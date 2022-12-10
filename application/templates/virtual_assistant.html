@@ -23,14 +23,55 @@
     </div>
 
     <div class="row pl-3 pt-3">
-      <h5>Chat Suggestions</h5>
+      <h5>Product-Based Suggestions</h5>
+    </div>
+
+    <div class="row pt-2 pl-5" style="row-gap: 10px;">
+      {% set counts = namespace(val=0) %}
+
+      {% for aspect in indi_aes %}
+        {% set counts.val = counts.val + 1 %}
+        {% if loop.index0 % 3 == 0 %}
+          <div class="row" style="width: 700px; column-gap: 40px;">
+        {% endif %}
+          <button class="btn btn-outline-info btn-sm col"> {{aspect.name.title() }} <i class="fa-solid fa-circle-exclamation" style="float: right; margin-top:4px;"></i></button>
+        {% if counts.val == 3 %}
+          {% set counts.val = 0 %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <!-- <div class="row" style="width: 700px; column-gap: 40px;">
+        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
+        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
+        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
+      </div>
+
+      <div class="row" style="width: 700px; column-gap: 40px;">
+        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
+        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
+        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
+      </div> -->
+
+      <!-- <div>
+        {% for aspect in indi_aes %}
+          <button class="btn btn-outline-info btn-sm"> {{aspect.name}} <i class="fa-solid fa-circle-exclamation"></i></button>
+        {% endfor %}
+      </div>  -->
+    </div>
+
+    <div class="row pl-3 pt-3">
+      <h5>Frequently Asked Questions</h5>
     </div>
 
     <div class="row pt-2 pl-5">
       <div>
-        <li><button onclick="send_msg_ui('test');">test</button></li>
-      </div> 
+        <li><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">Connect me with a human</button></li>
+        <li class="my-2"><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">Get me contant info</button></li>
+        <li class="my-2"><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">About us</button></li>
+      </div>
     </div>
+
   </div>
 
   <div class="d-flex justify-content-end col" style="padding-right:30px;">
@@ -43,7 +84,7 @@
               <div class="chat-container" style="overflow: auto;">
                     <!-- chat messages -->
                 <div class="chat-message col-md-5 offset-md-7 bot-message">
-                      Welcome to ... How can I help you?
+                    How can I help you?
                 </div>
               </div>
               <div style="border-top: 1px solid #B2BABB;">
