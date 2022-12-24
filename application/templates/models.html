@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/models-css.css') }}">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script> 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 </head>
 
 <script>
@@ -204,9 +209,15 @@ var pieChart = new Chart(tt_PieCanvas, {
           <li class="list-group-item">Most Frequent: {{info.A2S.freq_class}}</li>
         </ul>
         <div class="card-body" style="margin:0 auto;">
+          {% if dependency.A2S %}
           <a class="card-link btn btn-outline-primary" href="{{url_for('individual_aespect',file_name=file)}}">
             Result
           </a>
+          {% else %}
+          <a class="card-link btn btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#Modal-A2S-Dependency">
+            <span style="color: #007bff;">Result</span> 
+          </a>
+          {% endif %}
         </div>
     </div>
     
@@ -263,12 +274,75 @@ var pieChart = new Chart(tt_PieCanvas, {
           <li class="list-group-item">A third item</li>
         </ul> -->
         <div class="card-body" style="margin:0 auto; padding-top: 150px;">
+          {% if dependency.VCA %}
           <a class="card-link btn btn-outline-primary" href="{{url_for('v_assistant_ui',file_name=file)}}">
             Chat
           </a>
+          {% else %}
+          <a class="card-link btn btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#Modal-VCA-Part-Dependency">
+            <span style="color: #007bff;">Chat</span> 
+          </a>
+          {% endif %}
         </div>
     </div>   
   </div>
 </div>
+
+<!-- Modal Stuff -->
+
+<!-- Full Dependency -->
+<!-- Process SBAE before A2S -->
+<div class="modal fade" id="Modal-A2S-Dependency" tabindex="-1" aria-labelledby="Modal-A2S-DependencyLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Modal-A2S-DependencyLabel">Warning</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body">
+        <div style="color: #2f6a9a; font-weight: bold;">You need to process Sentiment-Based Aspect Extractor before using Aspect to Score.</div>
+
+        <div style="font-size: small; margin-top: 20px;">Do you want to process Sentiment-Based Aspect Extractor?</div> 
+      </div>
+      <div class="modal-footer">
+        <a class="card-link btn btn-outline-primary" href="{{url_for('individual_aespect',file_name=file)}}">
+          Process
+        </a>
+        <!-- <button type="button" class="btn btn-primary" href="{{url_for('individual_aespect',file_name=file)}}">Process</button> -->
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Partial Dependency -->
+<!-- VCA product based suggesion -->
+<div class="modal fade" id="Modal-VCA-Part-Dependency" tabindex="-1" aria-labelledby="Modal-VCA-Part-DependencyLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Modal-VCA-Part-DependencyLabel">Warning</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body">
+        <div style="color: #2f6a9a; font-weight: bold;">You need to process Aspect to Score to unlock full features of the virtual assistant.</div>
+
+        
+        <div style="font-size: small; margin-top: 20px;">
+          <div> <strong>These following features will be locked until the condition is met:</strong> </div>
+          <li>Product-Based suggesions</li>
+        </div> 
+      </div>
+      <div class="modal-footer">
+        <a class="card-link btn btn-primary" href="{{url_for('v_assistant_ui',file_name=file)}}">
+          Continue
+        </a>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>

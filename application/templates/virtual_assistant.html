@@ -22,43 +22,26 @@
       <h2>Virtual Assistant</h2>
     </div>
 
+    {% if sb_token != {} %}
     <div class="row pl-3 pt-3">
       <h5>Product-Based Suggestions</h5>
     </div>
 
     <div class="row pt-2 pl-5" style="row-gap: 10px;">
       {% set counts = namespace(val=0) %}
-
-      {% for aspect in indi_aes %}
+      {% for aspect_token,aspect_text in sb_token.items() %}
         {% set counts.val = counts.val + 1 %}
         {% if loop.index0 % 3 == 0 %}
           <div class="row" style="width: 700px; column-gap: 40px;">
         {% endif %}
-          <button class="btn btn-outline-info btn-sm col"> {{aspect.name.title() }} <i class="fa-solid fa-circle-exclamation" style="float: right; margin-top:4px;"></i></button>
+          <button class="btn btn-outline-info btn-sm col" onclick="send_msg_ui('{{aspect_text}}')"> {{aspect_token.title() }} <i class="fa-solid fa-circle-exclamation" style="float: right; margin-top:4px;"></i></button>
         {% if counts.val == 3 %}
           {% set counts.val = 0 %}
           </div>
         {% endif %}
       {% endfor %}
-
-      <!-- <div class="row" style="width: 700px; column-gap: 40px;">
-        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
-        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
-        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
-      </div>
-
-      <div class="row" style="width: 700px; column-gap: 40px;">
-        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
-        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
-        <button class="btn btn-outline-info btn-sm col"> Test <i class="fa-solid fa-circle-exclamation"></i></button>
-      </div> -->
-
-      <!-- <div>
-        {% for aspect in indi_aes %}
-          <button class="btn btn-outline-info btn-sm"> {{aspect.name}} <i class="fa-solid fa-circle-exclamation"></i></button>
-        {% endfor %}
-      </div>  -->
     </div>
+    {% endif %}
 
     <div class="row pl-3 pt-3">
       <h5>Frequently Asked Questions</h5>
@@ -66,9 +49,12 @@
 
     <div class="row pt-2 pl-5">
       <div>
-        <li><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">Connect me with a human</button></li>
+        {% for f_token_key, f_token_val in faq_tokens.items() %}
+          <li style="padding: 5px;"><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('{{f_token_val}}');">{{f_token_key}}</button></li>
+        {% endfor %}
+        <!-- <li><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">Connect me with a human</button></li>
         <li class="my-2"><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">Get me contant info</button></li>
-        <li class="my-2"><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">About us</button></li>
+        <li class="my-2"><button class="btn btn-outline-dark btn-sm" onclick="send_msg_ui('test');">About us</button></li> -->
       </div>
     </div>
 
@@ -77,14 +63,15 @@
   <div class="d-flex justify-content-end col" style="padding-right:30px;">
     <div class="row align-items-center">
         <div class="col-md-8 col-sm-12">
-            <div class="justify-content-center" style="width: 502px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
+            <div class="justify-content-center" style="width: 550px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
               <div style="background-color: #2b303e; height:60px; text-align: center; line-height: 55px;">
                 <span style="color:white; font-size: 25px; ">Virtual Assistant</span>
               </div>
-              <div class="chat-container" style="overflow: auto;">
+              <div class="chat-container" style="overflow: auto; width: 100%;">
                     <!-- chat messages -->
                 <div class="chat-message col-md-5 offset-md-7 bot-message">
-                    How can I help you?
+                      Hi there!, this is your virtual chatbot.
+                      How can I help you?
                 </div>
               </div>
               <div style="border-top: 1px solid #B2BABB;">

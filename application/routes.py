@@ -54,7 +54,6 @@ def file_menu():
             file_id = Data.query.filter_by(name=file).first().id
             review_data = pd.read_sql_query(sql = Review.query.filter_by(data_id=file_id).statement, con=db.session.bind)
             review_data.rename(columns={'rating': 'Ratings', 'title': 'Title', 'review': 'Content'}, inplace=True)
-            print(review_data)
             review_data = review_data.head(3).append(review_data.tail(3))
             columns = list(review_data.columns.values)
             temp = {}
@@ -147,9 +146,12 @@ def all_aespect(file_name):
 def individual_aespect(file_name):
     ctrl_individual_aespect = RoutePipeLine(file_name)
     indi_aespect_out = ctrl_individual_aespect.route_individual_aespect()
-    # header = ["#","Aespects","Postive-Negative Ratio","Influence Score"]
-    # return render_template("aespect-individual.html",col_head=header,data=indi_aespect_out,file=file_name) # use data from DB
-    return render_template("aespect-individual_v2.html",data=indi_aespect_out,file=file_name)
+    modal_info = {"Influence Score" : "Represents the overall impact of the aspect regardless of ratio differences. This score is sensitive to outliers, which means that a single negative review will have an impact on the overall score even if the score is excessively positive and vice versa. This will help you spot overlooked issues the product might have early on.",
+                  "Total Found" : "Total number of review found associated with the aspect",
+                  "Most Controversial" : "Identifies the sentiment with the most conflicting opinion",
+                  "Most Dominant": "Identifies the sentiment with the highest ratio",
+                  "Statistics" : "<span>The y-axis is describes kurtosis and x-axis describes skewness. The size of the bubble represents the standard deviation. <br> </span> <li><strong>Mean</strong>: average of sentiment score for the label </li> <li><strong>Standard Deviation</strong>: measurement of how dispersed the sentiment score is in relation to the mean for the label</li> <li> <strong>Skewness</strong>: measurement of the asymmetry of a distribution. A distribution is asymmetrical when its left and right side are not mirror images. A distribution can have right (or positive), left (or negative), or zero skewness.</li> <li> <strong>Kurtosis</strong>: statistical measurement to describe the degree to which scores cluster in the tails or the peak of a frequency distribution</li> <li> <strong>Min</strong>: smallest sentiment score found for the aspect in the label</li> <li><strong><strong></strong>Max</strong>: largest sentiment score found for the aspect in the label</li>"}
+    return render_template("aespect-individual_v2.html",data=indi_aespect_out,file=file_name, modal_info = modal_info)
 
 @app.route("/models/<file_name>", methods=['GET'])
 def models(file_name):
@@ -185,9 +187,9 @@ def models(file_name):
             }
 
     ctrl_models = RoutePipeLine(file_name)
-    info = ctrl_models.route_models(info)
-
-    return render_template("models.html" , file = file_name, info=info)
+    info,dependency = ctrl_models.route_models(info)
+    
+    return render_template("models.html" , file = file_name, info=info, dependency=dependency)
 
 @app.route("/into-set-SBAE/<file_name>", methods=['GET'])
 def into_set_SBAE(file_name):
@@ -241,8 +243,22 @@ def v_assistant_ui(file_name):
     ctrl_v_assistant = RoutePipeLine(file_name)
 
     aspect = ctrl_v_assistant.route_v_assistant_ui()
+    avail_entities = {"battery":"Is there any way to improve battery life of the product?",
+                      "design":"How to make the product more attractive?",
+                      "priced":"Best way to determine price of the product"}
 
-    return render_template("virtual_assistant.html",file = file_name,indi_aes = aspect)
+    faq_token = {"Connect me with a human": "Can I talk with a human?",
+                 "Contant Info" : "Is there anyway to get in touch with the company?",
+                 "About us" : "Tell me about the company"}
+
+    suggestion_token = {}
+
+    if aspect != None:
+        for a in aspect:
+            if a in avail_entities.keys():
+                suggestion_token[a] = avail_entities[a]
+
+    return render_template("virtual_assistant.html",file = file_name,sb_token = suggestion_token, faq_tokens = faq_token)
 
  
 @app.route('/webhook', methods=['POST'])
