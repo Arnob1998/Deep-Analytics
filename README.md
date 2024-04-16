@@ -4,7 +4,7 @@ Demo:
   * https://arnob.pythonanywhere.com/
 
 Pitch Deck
-   [Google Slides](https://link-url-here.org](https://docs.google.com/presentation/d/1RvCBHlCysbxsitqjaCqRcjyZPm2ji1JT/edit?usp=sharing&ouid=111697198626935209974&rtpof=true&sd=true)
+   [Google Slides](https://docs.google.com/presentation/d/1RvCBHlCysbxsitqjaCqRcjyZPm2ji1JT/edit?usp=sharing&ouid=111697198626935209974&rtpof=true&sd=true)
 
 Notes for Demo: 
   * Only Nintendo Switch data is fully processed.
