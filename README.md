@@ -19,3 +19,6 @@ Here are some limits because since I am using a free hosting site:
   * Attempting to process unprocessed data will result in a server error
   
 Find the review data that was used in Current Repo's: "application/static/file/"
+
+
+static
